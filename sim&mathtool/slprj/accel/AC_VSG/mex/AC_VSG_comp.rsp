@@ -1,0 +1,7 @@
+﻿-I"E:\Embedded Full ENG Path\VSG_Inverter\sim&mathtool"
+-I"E:\Embedded Full ENG Path\VSG_Inverter\sim&mathtool\slprj\accel\AC_VSG"
+-I"D:\Program Files\MATLAB\R2022b\extern\include"
+-I"D:\Program Files\MATLAB\R2022b\simulink\include"
+-I"D:\Program Files\MATLAB\R2022b\rtw\c\src"
+-I"D:\Program Files\MATLAB\R2022b\toolbox\physmod\powersys\facts\facts"
+-I"D:\Program Files\MATLAB\R2022b\toolbox\physmod\powersys\DR\DR"
