@@ -637,8 +637,154 @@ static void Calculate_Cursor(ui_t *ui, ui_page_t *Page, ui_item_t *now_Item,ui_i
         break;
     }
 }
-
 static void Draw_TextPage(ui_t *ui, ui_page_t *Page, ui_item_t *now_Item, ui_item_t *next_item)
+{
+    ui_item_t *temp_item = Page->item.head;
+    int16_t selected_anim_y = UI_PAGE_INIT_Y;
+    int16_t cursor_target_row = 0;
+    uint8_t color = 2;
+
+    /* 切页时，重新初始化文本动画位置 */
+    if (ui->nowItem->page.location != next_item->page.location)
+    {
+        for (uint16_t i = 0; i <= Page->length; i++)
+        {
+            temp_item->animationY = 0;
+            temp_item = temp_item->nextItem;
+        }
+        temp_item = Page->item.head;
+    }
+
+    /* 逐项绘制 */
+    for (uint16_t i = 0; i <= Page->length; i++)
+    {
+        temp_item->animationY = (int16_t)UI_Animation((float)temp_item->y,
+                                                      (float)temp_item->animationY,
+                                                      &ui->animation.textPage_ani);
+
+        /* 记录当前选中项“实际绘制后的”基线Y */
+        if (temp_item == next_item)
+        {
+            selected_anim_y = temp_item->animationY;
+        }
+
+        if (temp_item->animationY >= -UI_FONT_HIGHT &&
+            temp_item->animationY <= UI_VER_RES + UI_FONT_HIGHT)
+        {
+            if (temp_item->itemType == UI_ITEM_DATA && temp_item->element != NULL)
+            {
+                char Data[10] = {0};
+                Disp_SetClipWindow(UI_DATA_X0, UI_DATA_Y0, UI_DATA_X1, UI_DATA_Y1);
+
+                switch (temp_item->element->data->dataType)
+                {
+                case UI_DATA_INT:
+                    snprintf(Data, sizeof(Data), "%d",
+                             *(int *)(temp_item->element->data->ptr));
+                    break;
+
+                case UI_DATA_FLOAT:
+                    if (*(float *)(temp_item->element->data->ptr) >= 0.0f &&
+                        *(float *)(temp_item->element->data->ptr) < 10.0f)
+                        snprintf(Data, sizeof(Data), "%.3f",
+                                 *(float *)(temp_item->element->data->ptr));
+                    else
+                        snprintf(Data, sizeof(Data), "%.2f",
+                                 *(float *)(temp_item->element->data->ptr));
+                    break;
+
+                case UI_DATA_SWITCH:
+                    Disp_DrawRFrame(UI_DATA_X0,
+                                    temp_item->animationY - UI_FONT_HIGHT + 3,
+                                    UI_FONT_HIGHT,
+                                    UI_FONT_HIGHT,
+                                    2);
+                    if (*(uint8_t *)temp_item->element->data->ptr == true)
+                    {
+                        Disp_DrawRBox(UI_DATA_X0 + 2,
+                                      temp_item->animationY - UI_FONT_HIGHT + 5,
+                                      UI_FONT_HIGHT - 4,
+                                      UI_FONT_HIGHT - 4,
+                                      2);
+                    }
+                    break;
+
+                case UI_DATA_STRING:
+                    if (temp_item->element->data->ptr != NULL)
+                    {
+                        strncpy(Data,
+                                (char *)(temp_item->element->data->ptr),
+                                sizeof(Data) - 1);
+                        Data[sizeof(Data) - 1] = '\0';
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+
+                if (temp_item->element->data->dataType != UI_DATA_SWITCH)
+                {
+                    Disp_DrawStr(UI_DATA_X0, temp_item->animationY, Data);
+                }
+            }
+
+            Disp_SetClipWindow(UI_TITLE_X0, UI_TITLE_Y0, UI_TITLE_X1, UI_TITLE_Y1);
+
+#if ( UI_TITLE_ROLL == 1 )
+            switch (temp_item->rollState)
+            {
+            case UI_ITEM_ROLL_STOP:
+                if (strlen(temp_item->itemName) * UI_FONT_WIDTH > (UI_TITLE_X1 - UI_TITLE_X0))
+                    temp_item->rollState = UI_ITEM_ROLL_FORWARD;
+                break;
+
+            case UI_ITEM_ROLL_FORWARD:
+                temp_item->x--;
+                if ((strlen(temp_item->itemName) * UI_FONT_WIDTH + temp_item->x) < (UI_TITLE_X1 - UI_TITLE_X0))
+                    temp_item->rollState = UI_ITEM_ROLL_BACKWARD;
+                break;
+
+            case UI_ITEM_ROLL_BACKWARD:
+                temp_item->x++;
+                if (temp_item->x > 0)
+                    temp_item->rollState = UI_ITEM_ROLL_STOP;
+                break;
+
+            default:
+                break;
+            }
+#endif
+            Disp_DrawStr(temp_item->x, temp_item->animationY, temp_item->itemName);
+        }
+
+        temp_item = temp_item->nextItem;
+    }
+
+    /* 高光框：保留动画，但动画目标改成“选中项实际动画基线Y + 固定补偿” */
+    cursor_target_row = selected_anim_y - UI_FONT_HIGHT + UI_TEXT_CURSOR_Y_OFFSET;
+
+    Disp_SetClipWindow(UI_TITLE_X0, UI_TITLE_Y0, UI_TITLE_X1, UI_TITLE_Y1);
+    color = 2;
+    Disp_SetDrawColor(&color);
+
+    ui->cursor.nowRow = (int)UI_Animation((float)cursor_target_row,
+                                          (float)ui->cursor.nowRow,
+                                          &ui->animation.cursor_ani);
+
+    ui->cursor.nowWide = (int)UI_Animation((float)ui->cursor.targrtWide,
+                                           (float)ui->cursor.nowWide,
+                                           &ui->animation.cursor_ani);
+
+    Disp_DrawRBox(ui->headX,
+                  ui->cursor.nowRow,
+                  ui->cursor.nowWide,
+                  UI_FONT_HIGHT - 1,
+                  0);
+
+    Disp_SetMaxClipWindow();
+}
+/*static void Draw_TextPage(ui_t *ui, ui_page_t *Page, ui_item_t *now_Item, ui_item_t *next_item)
 {
     ui_item_t * temp_item = Page->item.head; // 从页面的头部开始遍历
 
@@ -716,15 +862,17 @@ static void Draw_TextPage(ui_t *ui, ui_page_t *Page, ui_item_t *now_Item, ui_ite
         }
         temp_item = temp_item->nextItem;
     }
+    
+    //高亮显示
     uint8_t color = 2;
-    Disp_SetDrawColor(&color); // 设置特定的颜色，通常用于高亮显示
+    Disp_SetDrawColor(&color); 
     // 根据目标位置和当前位置，以及PID算法计算并更新当前选项的位置和宽度
-    ui->cursor.nowRow = (int )UI_Animation((float )ui->cursor.targrtRow, (float )ui->cursor.nowRow, &ui->animation.cursor_ani);
     ui->cursor.nowWide = (int )UI_Animation((float )ui->cursor.targrtWide, (float )ui->cursor.nowWide, &ui->animation.cursor_ani);
+    ui->cursor.nowRow = (int )UI_Animation((float )ui->cursor.targrtRow, (float )ui->cursor.nowRow, &ui->animation.cursor_ani);
     // 绘制选中项的高亮边框
     Disp_DrawRBox(ui->headX , ui->cursor.nowRow, ui->cursor.nowWide, UI_FONT_HIGHT- 1, 0);
     Disp_SetMaxClipWindow();
-}
+}*/
 
 static void Draw_ImagePage(ui_t *ui, ui_page_t *Page, ui_item_t *nowItem, ui_item_t *next_item)
 {

@@ -51,6 +51,7 @@ extern "C" {
 #define UI_FONT_WIDTH  6
 // 文本间距
 #define UI_TEXT_SPACE  16
+#define UI_TEXT_CURSOR_Y_OFFSET  3
 // 起始Y坐标，基于字体大小设定的第一行位置
 #define UI_PAGE_INIT_Y   UI_FONT_HIGHT
 // 起始X坐标
@@ -124,8 +125,8 @@ typedef struct {
     QueueHandle_t *dataRootQueue;
     SemaphoreHandle_t *dataRootMutex;
     #endif
-    int max;
-    int min;
+    int max;    //data->max == group_id 表示 组号（同组互斥）
+    int min;    //data->min == 1 表示 radio 模式启用
     float step;
 } ui_data_t;
 

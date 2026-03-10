@@ -14,6 +14,7 @@ APF可选开关
 
 
 ## TOLIST:  
+* 息屏休眠与运输模式
 * 环路以外基础功能
 * 发波、中断
 * 卡采样点，校准ADC
@@ -25,4 +26,8 @@ APF可选开关
 * VSG
 * 直流模式
 
-
+UI_PAGE_TEXT中：
+UI_ITEM_RETURN必须搭配菜单页面
+UI_ITEM_DATA是正常的数据项
+UI_ITEM_WORD可以呼出文本框
+UI_ITEM_PARENTS可以指向本页头部

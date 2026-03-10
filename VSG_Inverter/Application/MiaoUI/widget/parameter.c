@@ -88,18 +88,63 @@ void ParameterSetting_Widget(ui_t *ui)
 
 void Switch_Widget(ui_t *ui)
 {
-    *(uint8_t *)ui->nowItem->element->data->ptr = ! *(uint8_t *)ui->nowItem->element->data->ptr; // 切换开关状态
-    if(ui->nowItem->element->data->function != NULL) ui->nowItem->element->data->function(ui);
-    #if ( UI_USE_FREERTOS == 1 )
-    if(ui->nowItem->element->data->dataRootTask != NULL)
+    ui_data_t *data;
+    ui_page_t *page;
+    ui_item_t *it;
+
+    if (ui == NULL || ui->nowItem == NULL || ui->nowItem->element == NULL || ui->nowItem->element->data == NULL)
+        return;
+
+    data = ui->nowItem->element->data;
+    if (data->dataType != UI_DATA_SWITCH || data->ptr == NULL)
+        return;
+
+    /* ===== 多选一（radio）判定：min==1 且 max>0 ===== */
+    if (data->min == 1 && data->max > 0)
     {
-        switch (*(uint8_t *)ui->nowItem->element->data->ptr)
+        int group_id = data->max;
+
+        /* 先全 0 */
+        page = ui->nowItem->page.location;
+        it = page->item.head;
+        for (uint16_t i = 0; i <= page->length; i++)
+        {
+            if (it->itemType == UI_ITEM_DATA &&
+                it->element && it->element->data &&
+                it->element->data->dataType == UI_DATA_SWITCH &&
+                it->element->data->min == 1 &&              /* 也是 radio */
+                it->element->data->max == group_id &&       /* 同组 */
+                it->element->data->ptr != NULL)
+            {
+                *(uint8_t *)it->element->data->ptr = 0;
+            }
+            it = it->nextItem;
+        }
+
+        /* 再把当前项写 1（保证同组始终只有一个为 1） */
+        *(uint8_t *)data->ptr = 1;
+    }
+    else
+    {
+        /* ===== 普通 switch（多选）保持原行为：翻转 ===== */
+        *(uint8_t *)data->ptr = !*(uint8_t *)data->ptr;
+    }
+
+    /* ===== 保留用户自定义回调，不占用 function ===== */
+    if (data->function != NULL)
+        data->function(ui);
+
+    /* ===== 原有 RTOS task suspend/resume 逻辑保持不变 ===== */
+    #if ( UI_USE_FREERTOS == 1 )
+    if (data->dataRootTask != NULL)
+    {
+        switch (*(uint8_t *)data->ptr)
         {
         case false:
-            vTaskResume(*ui->nowItem->element->data->dataRootTask);
+            vTaskResume(*data->dataRootTask);
             break;
         case true:
-            vTaskSuspend(*ui->nowItem->element->data->dataRootTask);
+            vTaskSuspend(*data->dataRootTask);
             break;
         default:
             break;
