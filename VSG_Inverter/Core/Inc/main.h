@@ -47,6 +47,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+//记得在此处包含你用到的外设的头文件
 #include "adc.h"
 #include "dac.h"
 #include "spi.h"

@@ -68,6 +68,7 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/***********************移动中断向量表到SRAM以提升速度*************************/
 #define VECT_TAB_START  0x10007C00
 #define VECT_TAB_SIZE   0x400
 extern uint32_t Load$$ER_IROM1$$Base; // 获取 Flash 中原始向量表地址
@@ -86,6 +87,39 @@ void RelocateVectorTable(void) {
     SCB->VTOR = VECT_TAB_START;
     __DSB(); // 数据同步屏障
     __enable_irq();
+}
+
+/**************************从120MHz超频至240MHz********************************/
+//不影响外设时钟
+void STM32G474_OverClock(void)
+{
+    LL_RCC_HSI_Enable();
+    while (LL_RCC_HSI_IsReady() != 1) {}
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
+    while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI) {}
+        
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_7);
+    while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_7) { }
+    
+    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
+    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_4);
+    
+    LL_RCC_PLL_Disable();
+    while (LL_RCC_PLL_IsReady() == 1) {}
+    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLR_DIV_2);
+    LL_RCC_PLL_ConfigDomain_ADC(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLP_DIV_8);
+    LL_RCC_PLL_EnableDomain_SYS();
+    LL_RCC_PLL_Enable();
+    while(LL_RCC_PLL_IsReady() != 1){}
+
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
+    while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL){}
+        
+    for (__IO uint32_t i = (170 >> 1); i !=0; i--);
+    
+    LL_SetSystemCoreClock(240000000);
+    if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK) Error_Handler();
 }
 /* USER CODE END 0 */
 
@@ -118,34 +152,8 @@ int main(void)
     SCB->SHCSR |= SCB_SHCSR_BUSFAULTENA_Msk;
     SCB->SHCSR |= SCB_SHCSR_USGFAULTENA_Msk;
     
-    //手动超频到240MHz，不影响外设时钟
-    LL_RCC_HSI_Enable();
-    while (LL_RCC_HSI_IsReady() != 1) {}
-    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
-    while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI) {}
-        
-    LL_FLASH_SetLatency(LL_FLASH_LATENCY_7);
-    while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_7) { }
-    
-    LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
-    LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
-    LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_4);
-    
-    LL_RCC_PLL_Disable();
-    while (LL_RCC_PLL_IsReady() == 1) {}
-    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLR_DIV_2);
-    LL_RCC_PLL_ConfigDomain_ADC(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLP_DIV_8);
-    LL_RCC_PLL_EnableDomain_SYS();
-    LL_RCC_PLL_Enable();
-    while(LL_RCC_PLL_IsReady() != 1){}
-
-    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
-    while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL){}
-        
-    for (__IO uint32_t i = (170 >> 1); i !=0; i--);
-    
-    LL_SetSystemCoreClock(240000000);
-    if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK) Error_Handler();
+    //手动超频到240MHz
+    STM32G474_OverClock();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */

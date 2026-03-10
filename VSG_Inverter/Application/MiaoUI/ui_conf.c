@@ -89,7 +89,7 @@ void Create_Text(ui_t *ui)
     github_text.font = UI_FONT;
     github_text.fontHight = UI_FONT_HIGHT;
     github_text.fontWidth = UI_FONT_WIDTH;
-    github_text.ptr = "    NUEDC-2025-A\nGit:github.com/TKWTL/NUEDC-2025-A\n UI Provider:github.com/JFeng-Z/MiaoUI";
+    github_text.ptr = "    VSG Inverter\nGit:github.com/TKWTL/VSG_Inverter\n UI Provider:github.com/JFeng-Z/MiaoUI";
     static ui_element_t github_element;
     github_element.text = &github_text;
     Create_element(&Github_Item, &github_element);
