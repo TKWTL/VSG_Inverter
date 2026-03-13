@@ -4,7 +4,6 @@
 *******************************************************************************/
 #include "application.h"
 
-extern ST_PR PR_A, PR_B, PFC_PR_A, PFC_PR_B, PFC_PR_C;
 
 //在调度器启动后才开始初始化开关电源相关步骤
 void ADC_Task(void *argument)
@@ -14,12 +13,6 @@ void ADC_Task(void *argument)
     
     //ADC_Init();
     
-    //初始化PR差分方程系数，必须在环路开始前执行 
-    PR_Init(&PR_A);
-    PR_Init(&PR_B);
-    PR_Init(&PFC_PR_A);
-    PR_Init(&PFC_PR_B);
-    PR_Init(&PFC_PR_C);
     
     //Timer_Init(&ui);
     

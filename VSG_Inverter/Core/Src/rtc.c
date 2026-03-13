@@ -117,7 +117,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* rtcHandle)
     }
     LL_RCC_ForceBackupDomainReset();
     LL_RCC_ReleaseBackupDomainReset();
-    LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_MEDIUMLOW);
+    LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_MEDIUMHIGH);
     LL_RCC_LSE_Enable();
 
    /* Wait till LSE is ready */

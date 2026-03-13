@@ -209,7 +209,9 @@ void vApplicationIdleHook( void )
    important that vApplicationIdleHook() is permitted to return to its calling
    function, because it is the responsibility of the idle task to clean up
    memory allocated by the kernel to any task that has since been deleted. */
+    //LL_GPIO_SetOutputPin(TEST1_GPIO_Port, TEST1_Pin);
     __WFI();
+    //LL_GPIO_ResetOutputPin(TEST1_GPIO_Port, TEST1_Pin);//教训：不要使用PC13，否则会搞坏RTC
 }
 /* USER CODE END 2 */
 

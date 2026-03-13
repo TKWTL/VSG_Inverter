@@ -70,7 +70,7 @@ void Create_Disp_Parameters(ui_t *ui){
     Create_element(&Rotation_Item, &Rotation_element);
 }
 
-ui_page_t Display_Page;
+ui_page_t Display_Page, Display_Page2;
 //将显示屏模块的对象添加到菜单中
 void Add_Disp_Items(ui_page_t *ParentPage){
     AddItem("-Display", UI_ITEM_PARENTS, img_screen, &Display_Item, ParentPage, &Display_Page, NULL);

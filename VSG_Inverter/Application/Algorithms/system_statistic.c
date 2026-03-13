@@ -26,6 +26,10 @@ float Tjunction = 15.0f;    //MCU结温，单位摄氏度
 float Vbattery = 3.1f;      //电池电压
 float Vintref = 1.2f;       //内部参考电压值
 
+#define VREF_FLOAT  3.3f
+#define VREF_MV     3300
+#define FULLSCALE   16384
+
 #define OVERSAMPLE_RATE     4   //均值滤波平均次数
 #define SAMPLE_PERIOD       400//采样周期，单位ms
 
@@ -39,15 +43,15 @@ void ADC_SampleandFilter(void){
     switch(i){
         case OVERSAMPLE_RATE://一轮采样完成，滤波并更新
             Tjunction = (float)((130L- TEMPSENSOR_CAL1_TEMP)* 
-                        ((float)adc_accumulator[CH_TJ]* 3300/ (TEMPSENSOR_CAL_VREFANALOG* OVERSAMPLE_RATE) - *TEMPSENSOR_CAL1_ADDR)/ 
+                        ((float)adc_accumulator[CH_TJ]* VREF_MV/ (TEMPSENSOR_CAL_VREFANALOG* OVERSAMPLE_RATE) - *TEMPSENSOR_CAL1_ADDR)/ 
                         ((float)(*TEMPSENSOR_CAL2_ADDR- *TEMPSENSOR_CAL1_ADDR))+
                         TEMPSENSOR_CAL1_TEMP);
         
-            Vbattery = adc_accumulator[CH_VBAT]* 3* 3.3f/ 4096/ OVERSAMPLE_RATE;
+            Vbattery = adc_accumulator[CH_VBAT]* 3* VREF_FLOAT/ FULLSCALE/ OVERSAMPLE_RATE;
         
-            Vintref = adc_accumulator[CH_VREF]* 3.3f/ 4096/ OVERSAMPLE_RATE;
+            Vintref = adc_accumulator[CH_VREF]* VREF_FLOAT/ FULLSCALE/ OVERSAMPLE_RATE;
         
-            for(j = 0; j < CH_TOTAL; j++) adc_accumulator[j] = 0;
+            for(j = 0; j < CH_TOTAL; j++) adc_accumulator[j] = 0;//滤波数组清零
             osDelay(pdMS_TO_TICKS(SAMPLE_PERIOD/ (OVERSAMPLE_RATE+ 1)));
             i = 0;
             break;
@@ -55,7 +59,7 @@ void ADC_SampleandFilter(void){
         default://采样周期
             HAL_ADC_Start_DMA(&hadc5, (uint32_t*)adc_buffer, CH_TOTAL);
             osDelay(pdMS_TO_TICKS(SAMPLE_PERIOD/ (OVERSAMPLE_RATE+ 1)));//直接延时等待采样完成
-            for(j = 0; j < CH_TOTAL; j++) adc_accumulator[j] += adc_buffer[j];
+            for(j = 0; j < CH_TOTAL; j++) adc_accumulator[j] += adc_buffer[j];//累加滤波数组
             i++;
             break;
     }
@@ -100,8 +104,8 @@ void Add_Statistics_Items(ui_page_t *ParentPage){
     AddItem("-Statistics", UI_ITEM_PARENTS, img_statistics, &Statistic_Item, ParentPage, &Stat_Page, NULL);
         AddPage("[Statistics]", &Stat_Page, UI_PAGE_TEXT, ParentPage);
             AddItem("[Menu]", UI_ITEM_RETURN, NULL, &StatHead_Item, &Stat_Page, ParentPage, NULL);
-            AddItem(" CPU Temprature", UI_ITEM_DATA, NULL, &Tj_Item, &Stat_Page, NULL, NULL);
-            AddItem(" Battery Voltage", UI_ITEM_DATA, NULL, &VBAT_Item, &Stat_Page, NULL, NULL);
-            AddItem(" Internal VREF", UI_ITEM_DATA, NULL, &Vrefint_Item, &Stat_Page, NULL, NULL);
+            AddItem("CPU Temprature", UI_ITEM_DATA, NULL, &Tj_Item, &Stat_Page, NULL, NULL);
+            AddItem("RTC Battery Voltage", UI_ITEM_DATA, NULL, &VBAT_Item, &Stat_Page, NULL, NULL);
+            AddItem("Internal VREF", UI_ITEM_DATA, NULL, &Vrefint_Item, &Stat_Page, NULL, NULL);
 }
 

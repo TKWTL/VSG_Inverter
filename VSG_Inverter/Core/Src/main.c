@@ -98,8 +98,8 @@ void STM32G474_OverClock(void)
     LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI);
     while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI) {}
         
-    LL_FLASH_SetLatency(LL_FLASH_LATENCY_7);
-    while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_7) { }
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_5);
+    while(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_5) { }
     
     LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
     LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_4);
@@ -140,7 +140,17 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+    // === 【修正版】强制复位 Backup Domain（彻底解决 Errata 2.2.6）===
+    // 只在真正掉电/上电复位时清一次（保留电池供电时的 RTC 时间）
+    if (LL_RCC_IsActiveFlag_BORRST() ||          // POR / BOR 复位
+        LL_RCC_IsActiveFlag_PINRST() ||          // 外部 NRST 复位
+        LL_RCC_IsActiveFlag_LPWRRST()) {         // 低功耗唤醒复位（保险起见）
+        
+        LL_PWR_EnableBkUpAccess();               // 必须先打开 DBP
+        LL_RCC_ForceBackupDomainReset();         // BDRST = 1
+        LL_RCC_ReleaseBackupDomainReset();       // BDRST = 0
+        LL_RCC_ClearResetFlags();                // 清所有复位标志
+    }
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -179,7 +189,7 @@ int main(void)
   MX_ADC4_Init();
   MX_UART5_Init();
   /* USER CODE BEGIN 2 */
-
+  
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -220,7 +230,7 @@ void SystemClock_Config(void)
   }
 
   LL_PWR_EnableBkUpAccess();
-  LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_MEDIUMLOW);
+  LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_MEDIUMHIGH);
   LL_RCC_LSE_Enable();
    /* Wait till LSE is ready */
   while(LL_RCC_LSE_IsReady() != 1)

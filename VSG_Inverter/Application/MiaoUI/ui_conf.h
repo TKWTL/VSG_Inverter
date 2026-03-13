@@ -50,7 +50,7 @@ extern "C" {
 // 字体宽度
 #define UI_FONT_WIDTH  6
 // 文本间距
-#define UI_TEXT_SPACE  16
+#define UI_TEXT_SPACE  13
 #define UI_TEXT_CURSOR_Y_OFFSET  3
 // 起始Y坐标，基于字体大小设定的第一行位置
 #define UI_PAGE_INIT_Y   UI_FONT_HIGHT

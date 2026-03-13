@@ -26,8 +26,8 @@ APF可选开关
 * VSG
 * 直流模式
 
-UI_PAGE_TEXT中：
-UI_ITEM_RETURN必须搭配菜单页面
-UI_ITEM_DATA是正常的数据项
-UI_ITEM_WORD可以呼出文本框
-UI_ITEM_PARENTS可以指向本页头部
+UI_PAGE_TEXT中：  
+UI_ITEM_RETURN必须搭配菜单页面  
+UI_ITEM_DATA是正常的数据项  
+UI_ITEM_WORD可以呼出文本框  
+UI_ITEM_PARENTS可以指向本页头部或者制作TEXT跳转TEXT  

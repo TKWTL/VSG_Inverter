@@ -1,0 +1,345 @@
+version: "4.1"
+name: VSG_Inverter
+type: ARM
+deviceName: null
+packDir: null
+srcDirs: []
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders:
+    - name: Application
+      files: []
+      folders:
+        - name: MDK-ARM
+          files:
+            - path: startup_stm32g474xx.s
+          folders: []
+        - name: User
+          files: []
+          folders:
+            - name: Core
+              files:
+                - path: ../Core/Src/main.c
+                - path: ../Core/Src/gpio.c
+                - path: ../Core/Src/app_freertos.c
+                - path: ../Core/Src/adc.c
+                - path: ../Core/Src/comp.c
+                - path: ../Core/Src/cordic.c
+                - path: ../Core/Src/dac.c
+                - path: ../Core/Src/dma.c
+                - path: ../Core/Src/fdcan.c
+                - path: ../Core/Src/fmac.c
+                - path: ../Core/Src/hrtim.c
+                - path: ../Core/Src/rtc.c
+                - path: ../Core/Src/spi.c
+                - path: ../Core/Src/tim.c
+                - path: ../Core/Src/usart.c
+                - path: ../Core/Src/stm32g4xx_it.c
+                - path: ../Core/Src/stm32g4xx_hal_msp.c
+                - path: ../Core/Src/stm32g4xx_hal_timebase_tim.c
+              folders: []
+    - name: Drivers
+      files: []
+      folders:
+        - name: STM32G4xx_HAL_Driver
+          files:
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_utils.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_exti.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_gpio.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_adc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_rcc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_pwr.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_exti.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_comp.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_cordic.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_dma.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_dac.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_fdcan.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_fmac.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_hrtim.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rtc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rtc_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_usart.c
+          folders: []
+        - name: CMSIS
+          files:
+            - path: ../Core/Src/system_stm32g4xx.c
+          folders: []
+    - name: Middlewares
+      files: []
+      folders:
+        - name: FreeRTOS
+          files:
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/list.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/queue.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/tasks.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/timers.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_1.c
+            - path: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
+          folders: []
+    - name: Driver
+      files:
+        - path: ../Drivers/Buttons/buttons.c
+        - path: ../Drivers/OLED/oled.c
+      folders: []
+    - name: MIaoUI
+      files:
+        - path: ../Application/MiaoUI/ui_conf.c
+        - path: ../Application/MiaoUI/core/ui.c
+        - path: ../Application/MiaoUI/display/dispDriver.c
+        - path: ../Application/MiaoUI/fonts/fonts.c
+        - path: ../Application/MiaoUI/images/image.c
+        - path: ../Application/MiaoUI/indev/indevDriver.c
+        - path: ../Application/MiaoUI/widget/custom.c
+        - path: ../Application/MiaoUI/widget/parameter.c
+        - path: ../Application/MiaoUI/widget/text.c
+        - path: ../Application/MiaoUI/widget/wave.c
+        - path: ../Drivers/u8g2/u8g2_arc.c
+        - path: ../Drivers/u8g2/u8g2_bitmap.c
+        - path: ../Drivers/u8g2/u8g2_box.c
+        - path: ../Drivers/u8g2/u8g2_buffer.c
+        - path: ../Drivers/u8g2/u8g2_button.c
+        - path: ../Drivers/u8g2/u8g2_circle.c
+        - path: ../Drivers/u8g2/u8g2_cleardisplay.c
+        - path: ../Drivers/u8g2/u8g2_d_memory.c
+        - path: ../Drivers/u8g2/u8g2_d_setup.c
+        - path: ../Drivers/u8g2/u8g2_font.c
+        - path: ../Drivers/u8g2/u8g2_fonts.c
+        - path: ../Drivers/u8g2/u8g2_hvline.c
+        - path: ../Drivers/u8g2/u8g2_input_value.c
+        - path: ../Drivers/u8g2/u8g2_intersection.c
+        - path: ../Drivers/u8g2/u8g2_kerning.c
+        - path: ../Drivers/u8g2/u8g2_line.c
+        - path: ../Drivers/u8g2/u8g2_ll_hvline.c
+        - path: ../Drivers/u8g2/u8g2_message.c
+        - path: ../Drivers/u8g2/u8g2_polygon.c
+        - path: ../Drivers/u8g2/u8g2_selection_list.c
+        - path: ../Drivers/u8g2/u8g2_setup.c
+        - path: ../Drivers/u8g2/u8log.c
+        - path: ../Drivers/u8g2/u8log_u8g2.c
+        - path: ../Drivers/u8g2/u8log_u8x8.c
+        - path: ../Drivers/u8g2/u8x8_8x8.c
+        - path: ../Drivers/u8g2/u8x8_byte.c
+        - path: ../Drivers/u8g2/u8x8_cad.c
+        - path: ../Drivers/u8g2/u8x8_capture.c
+        - path: ../Drivers/u8g2/u8x8_d_ssd1306_128x64_noname.c
+        - path: ../Drivers/u8g2/u8x8_debounce.c
+        - path: ../Drivers/u8g2/u8x8_display.c
+        - path: ../Drivers/u8g2/u8x8_fonts.c
+        - path: ../Drivers/u8g2/u8x8_gpio.c
+        - path: ../Drivers/u8g2/u8x8_input_value.c
+        - path: ../Drivers/u8g2/u8x8_message.c
+        - path: ../Drivers/u8g2/u8x8_selection_list.c
+        - path: ../Drivers/u8g2/u8x8_setup.c
+        - path: ../Drivers/u8g2/u8x8_string.c
+        - path: ../Drivers/u8g2/u8x8_u8toa.c
+        - path: ../Drivers/u8g2/u8x8_u16toa.c
+      folders: []
+    - name: Algorithms
+      files:
+        - path: ../Application/Algorithms/control_algorithm.c
+        - path: ../Application/Algorithms/conv_adc.c
+        - path: ../Application/Algorithms/conv_algorithm.c
+        - path: ../Application/Algorithms/conv_protection.c
+        - path: ../Application/Algorithms/conv_pwm.c
+        - path: ../Application/Algorithms/differential_algorithm.c
+        - path: ../Application/Algorithms/display_effects.c
+        - path: ../Application/Algorithms/filtering_algorithm.c
+        - path: ../Application/Algorithms/math_algorithm.c
+        - path: ../Application/Algorithms/system_operation.c
+        - path: ../Application/Algorithms/system_statistic.c
+        - path: ../Application/Algorithms/time.c
+      folders: []
+    - name: Applications
+      files:
+        - path: ../Application/Applications/burn_in_tester.c
+        - path: ../Application/Applications/dashboard.c
+        - path: ../Application/Applications/game_dinosaur.c
+        - path: ../Application/Applications/game_snake.c
+        - path: ../Application/Applications/notifications_draw.c
+      folders: []
+    - name: Tasks
+      files:
+        - path: ../Application/Tasks/adc_handle.c
+        - path: ../Application/Tasks/beep.c
+        - path: ../Application/Tasks/button_handle.c
+        - path: ../Application/Tasks/menu.c
+        - path: ../Application/Tasks/notifications.c
+      folders: []
+    - name: ::CMSIS
+      files: []
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: 13295d23ab5e3fd3786b545a00f5af18
+targets:
+  VSG_Inverter:
+    cppPreprocessAttrs:
+      defineList:
+        - USE_FULL_LL_DRIVER
+        - USE_HAL_DRIVER
+        - STM32G474xx
+      incList:
+        - ../Core/Inc
+        - ../Drivers/STM32G4xx_HAL_Driver/Inc
+        - ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy
+        - ../Middlewares/Third_Party/FreeRTOS/Source/include
+        - ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+        - ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F
+        - ../Drivers/CMSIS/Device/ST/STM32G4xx/Include
+        - ../Drivers/CMSIS/Include
+        - ../Drivers/u8g2
+        - ../Application/MiaoUI
+        - ../Application/Applications
+        - ../Application/Algorithms
+        - ../Drivers/OLED
+        - ../Drivers/Buttons
+        - .cmsis/include
+        - RTE/_VSG_Inverter
+      libList: []
+    excludeList: []
+    toolchain: AC6
+    toolchainConfigMap:
+      AC6:
+        archExtensions: ""
+        cpuType: Cortex-M4
+        floatingPointHardware: single
+        options:
+          version: 3
+          afterBuildTasks: []
+          asm-compiler:
+            $use: asm-auto
+            defines: []
+            misc-controls: ""
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            CXX_FLAGS: -ffp-contract=fast
+            C_FLAGS: -ffp-contract=fast
+            language-c: c99
+            language-cpp: c++11
+            link-time-optimization: false
+            one-elf-section-per-function: true
+            optimization: level-3
+            short-enums#wchar: true
+            warnings: ac5-like-warnings
+          global:
+            output-debug-info: enable
+            use-microLIB: false
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            misc-controls: --pad=0x55
+            output-format: elf
+            ro-base: ""
+            rw-base: ""
+            xo-base: ""
+        scatterFilePath: stm32g474xx_flash.sct
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 3
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x20000"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 3
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x80000"
+                startAddr: "0x8000000"
+              tag: IROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: IROM
+        useCustomScatterFile: true
+    uploadConfigMap:
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: "null"
+          vendor: "null"
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+    uploader: JLink
